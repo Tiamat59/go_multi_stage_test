@@ -1,0 +1,9 @@
+FROM golang
+WORKDIR /usr/src/app
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+COPY . ./
+RUN go build -o app
+FROM ubuntu
+COPY --from=0 /usr/src/app ./
+CMD [ "./app" ]
